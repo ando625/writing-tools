@@ -1,0 +1,6 @@
+[server]
+# 認証がないため、同じネットワーク内の他の端末から使えないようにする。
+address = "localhost"
+
+[browser]
+gatherUsageStats = false
