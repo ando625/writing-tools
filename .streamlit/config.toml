@@ -2,5 +2,9 @@
 # 認証がないため、同じネットワーク内の他の端末から使えないようにする。
 address = "localhost"
 
+[client]
+# エラーの詳細を画面に出さない。詳細はターミナルのログで確認する。
+showErrorDetails = "none"
+
 [browser]
 gatherUsageStats = false
