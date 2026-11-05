@@ -11,6 +11,11 @@ INPUT_KEY_PREFIX = "input."
 API_KEY_STATE = "api_key"
 
 
+def without_images(text: str) -> str:
+    """AIの出力内の画像記法を文字扱いにする。画像の自動読み込みで入力内容が外部へ送られるのを防ぐ。"""
+    return text.replace("![", "!\\[")
+
+
 def input_key(tool: WritingTool, field_key: str) -> str:
     return f"{INPUT_KEY_PREFIX}{tool.key}.{field_key}"
 
@@ -94,7 +99,7 @@ def run_pending_request(api_key: str) -> None:
             ):
                 text += chunk
                 st.session_state.results[tool.key] = text
-                placeholder.markdown(text)
+                placeholder.markdown(without_images(text))
     except GeminiError as error:
         interrupted = "途中までの結果を表示しています。" if text else ""
         st.session_state.errors[tool.key] = f"{error} {interrupted}".strip()
@@ -116,7 +121,7 @@ def render_result(tool: WritingTool) -> None:
     st.subheader("生成結果")
     preview_tab, copy_tab = st.tabs(["表示", "コピー用"])
     with preview_tab:
-        st.markdown(result)
+        st.markdown(without_images(result))
     with copy_tab:
         st.code(result, language=None, wrap_lines=True)
     st.download_button(
